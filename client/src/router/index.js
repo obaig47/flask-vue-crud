@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Events from '../components/Events.vue';
+import EventsComponent from '../components/EventsComponent.vue';
 import Ping from '../components/Ping.vue';
 
 Vue.use(Router);
@@ -12,7 +12,7 @@ export default new Router({
     {
       path: '/',
       name: 'Events',
-      component: Events,
+      component: EventsComponent,
     },
     {
       path: '/ping',
