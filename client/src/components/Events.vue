@@ -2,10 +2,12 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-10">
-        <h1>Books</h1>
+        <h1>Events</h1>
         <hr><br><br>
         <alert :message=message v-if="showMessage"></alert>
-        <button type="button" class="btn btn-success btn-sm" v-b-modal.book-modal>Add Book</button>
+        <button type="button" class="btn btn-success btn-sm" v-b-modal.event-modal>
+          Add Event
+        </button>
         <br><br>
         <table class="table table-hover">
           <thead>
@@ -17,11 +19,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(book, index) in books" :key="index">
-              <td>{{ book.title }}</td>
-              <td>{{ book.author }}</td>
+            <tr v-for="(event, index) in events" :key="index">
+              <td>{{ event.title }}</td>
+              <td>{{ event.author }}</td>
               <td>
-                <span v-if="book.read">Yes</span>
+                <span v-if="event.read">Yes</span>
                 <span v-else>No</span>
               </td>
               <td>
@@ -29,14 +31,14 @@
                   <button
                           type="button"
                           class="btn btn-warning btn-sm"
-                          v-b-modal.book-update-modal
-                          @click="editBook(book)">
+                          v-b-modal.event-update-modal
+                          @click="editevent(event)">
                       Update
                   </button>
                   <button
                           type="button"
                           class="btn btn-danger btn-sm"
-                          @click="onDeleteBook(book)">
+                          @click="onDeleteEvent(event)">
                       Delete
                   </button>
                 </div>
@@ -46,44 +48,52 @@
         </table>
       </div>
     </div>
-    <b-modal ref="addBookModal"
-            id="book-modal"
-            title="Add a new book"
+    <!-- EVENT ENTRY MODAL -->
+    <b-modal ref="addEventModal"
+            id="event-modal"
+            title="Add a new event"
             hide-footer>
+      <!-- EVENT ENTRY FORM START -->
       <b-form @submit="onSubmit" @reset="onReset" class="w-100">
+
       <b-form-group id="form-title-group"
                     label="Title:"
                     label-for="form-title-input">
           <b-form-input id="form-title-input"
                         type="text"
-                        v-model="addBookForm.title"
+                        v-model="addEventForm.title"
                         required
                         placeholder="Enter title">
           </b-form-input>
         </b-form-group>
+
         <b-form-group id="form-author-group"
                       label="Author:"
                       label-for="form-author-input">
             <b-form-input id="form-author-input"
                           type="text"
-                          v-model="addBookForm.author"
+                          v-model="addEventForm.author"
                           required
                           placeholder="Enter author">
             </b-form-input>
           </b-form-group>
+
         <b-form-group id="form-read-group">
-          <b-form-checkbox-group v-model="addBookForm.read" id="form-checks">
+          <b-form-checkbox-group v-model="addEventForm.read" id="form-checks">
             <b-form-checkbox value="true">Read?</b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
+
         <b-button-group>
           <b-button type="submit" variant="primary">Submit</b-button>
           <b-button type="reset" variant="danger">Reset</b-button>
         </b-button-group>
+
       </b-form>
+
     </b-modal>
-    <b-modal ref="editBookModal"
-            id="book-update-modal"
+    <b-modal ref="editeventModal"
+            id="event-update-modal"
             title="Update"
             hide-footer>
       <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" class="w-100">
@@ -128,8 +138,8 @@ import Alert from './Alert.vue';
 export default {
   data() {
     return {
-      books: [],
-      addBookForm: {
+      events: [],
+      addEventForm: {
         title: '',
         author: '',
         read: [],
@@ -148,35 +158,35 @@ export default {
     alert: Alert,
   },
   methods: {
-    getBooks() {
-      const path = 'http://localhost:5000/books';
+    getEvents() {
+      const path = 'http://localhost:5000/events';
       axios.get(path)
         .then((res) => {
-          this.books = res.data.books;
+          this.events = res.data.events;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
         });
     },
-    addBook(payload) {
-      const path = 'http://localhost:5000/books';
+    addEvent(payload) {
+      const path = 'http://localhost:5000/events';
       axios.post(path, payload)
         .then(() => {
-          this.getBooks();
-          this.message = 'Book added!';
+          this.getEvents();
+          this.message = 'Event added!';
           this.showMessage = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.log(error);
-          this.getBooks();
+          this.getEvents();
         });
     },
     initForm() {
-      this.addBookForm.title = '';
-      this.addBookForm.author = '';
-      this.addBookForm.read = [];
+      this.addEventForm.title = '';
+      this.addEventForm.author = '';
+      this.addEventForm.read = [];
       this.editForm.id = '';
       this.editForm.title = '';
       this.editForm.author = '';
@@ -184,28 +194,28 @@ export default {
     },
     onSubmit(evt) {
       evt.preventDefault();
-      this.$refs.addBookModal.hide();
+      this.$refs.addEventModal.hide();
       let read = false;
-      if (this.addBookForm.read[0]) read = true;
+      if (this.addEventForm.read[0]) read = true;
       const payload = {
-        title: this.addBookForm.title,
-        author: this.addBookForm.author,
+        title: this.addEventForm.title,
+        author: this.addEventForm.author,
         read, // property shorthand
       };
-      this.addBook(payload);
+      this.addEvent(payload);
       this.initForm();
     },
     onReset(evt) {
       evt.preventDefault();
-      this.$refs.addBookModal.hide();
+      this.$refs.addEventModal.hide();
       this.initForm();
     },
-    editBook(book) {
-      this.editForm = book;
+    editevent(event) {
+      this.editForm = event;
     },
     onSubmitUpdate(evt) {
       evt.preventDefault();
-      this.$refs.editBookModal.hide();
+      this.$refs.editEventModal.hide();
       let read = false;
       if (this.editForm.read[0]) read = true;
       const payload = {
@@ -213,48 +223,48 @@ export default {
         author: this.editForm.author,
         read,
       };
-      this.updateBook(payload, this.editForm.id);
+      this.updateEvent(payload, this.editForm.id);
     },
-    updateBook(payload, bookID) {
-      const path = `http://localhost:5000/books/${bookID}`;
+    updateEvent(payload, eventID) {
+      const path = `http://localhost:5000/events/${eventID}`;
       axios.put(path, payload)
         .then(() => {
-          this.getBooks();
-          this.message = 'Book updated!';
+          this.getEvents();
+          this.message = 'event updated!';
           this.showMessage = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.getBooks();
+          this.getEvents();
         });
     },
     onResetUpdate(evt) {
       evt.preventDefault();
-      this.$refs.editBookModal.hide();
+      this.$refs.editeventModal.hide();
       this.initForm();
-      this.getBooks(); // why?
+      this.getEvents(); // why?
     },
-    removeBook(bookID) {
-      const path = `http://localhost:5000/books/${bookID}`;
+    removeEvent(eventID) {
+      const path = `http://localhost:5000/events/${eventID}`;
       axios.delete(path)
         .then(() => {
-          this.getBooks();
-          this.message = 'Book removed!';
+          this.getEvents();
+          this.message = 'Event removed!';
           this.showMessage = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
-          this.getBooks();
+          this.getEvents();
         });
     },
-    onDeleteBook(book) {
-      this.removeBook(book.id);
+    onDeleteEvent(event) {
+      this.removeEvent(event.id);
     },
   },
   created() {
-    this.getBooks();
+    this.getEvents();
   },
 };
 </script>

@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 
-BOOKS = [
+EVENTS = [
     {
         'id': uuid.uuid4().hex,
         'title': 'On the Road',
@@ -42,47 +42,47 @@ def ping_pong():
     return jsonify('pong!')
 
 
-def remove_book(book_id):
-    for book in BOOKS:
-        if book['id'] == book_id:
-            BOOKS.remove(book)
+def remove_event(event_id):
+    for event in EVENTS:
+        if event['id'] == event_id:
+            EVENTS.remove(event)
             return True
     return False
 
 
-@app.route('/books', methods=['GET', 'POST'])
-def all_books():
+@app.route('/events', methods=['GET', 'POST'])
+def all_events():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
-        BOOKS.append({
+        EVENTS.append({
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
             'author': post_data.get('author'),
             'read': post_data.get('read')
         })
-        response_object['message'] = 'Book added!'
+        response_object['message'] = 'Event added!'
     else:
-        response_object['books'] = BOOKS
+        response_object['events'] = EVENTS
     return jsonify(response_object)
 
 
-@app.route('/books/<book_id>', methods=['PUT', 'DELETE'])
-def single_book(book_id):
+@app.route('/events/<event_id>', methods=['PUT', 'DELETE'])
+def single_event(event_id):
     response_object = {'status': 'success'}
     if request.method == 'PUT':
         post_data = request.get_json()
-        remove_book(book_id)
-        BOOKS.append({
+        remove_event(event_id)
+        EVENTS.append({
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
             'author': post_data.get('author'),
             'read': post_data.get('read')
         })
-        response_object['message'] = 'Book updated!'
+        response_object['message'] = 'Event updated!'
     if request.method == 'DELETE':
-        remove_book(book_id)
-        response_object['message'] = 'Book removed!'
+        remove_event(event_id)
+        response_object['message'] = 'Event removed!'
     return jsonify(response_object)
 
 
