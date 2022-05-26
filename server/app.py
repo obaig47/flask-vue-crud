@@ -59,6 +59,7 @@ def all_events():
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
             'author': post_data.get('author'),
+            'date': post_data.get('date'),
             'read': post_data.get('read')
         })
         response_object['message'] = 'Event added!'
@@ -77,6 +78,7 @@ def single_event(event_id):
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
             'author': post_data.get('author'),
+            'date': post_data.get('author'),
             'read': post_data.get('read')
         })
         response_object['message'] = 'Event updated!'

@@ -14,6 +14,7 @@
             <tr>
               <th scope="col">Title</th>
               <th scope="col">Author</th>
+              <th scope="col">Date</th>
               <th scope="col">Read?</th>
               <th></th>
             </tr>
@@ -22,6 +23,7 @@
             <tr v-for="(event, index) in events" :key="index">
               <td>{{ event.title }}</td>
               <td>{{ event.author }}</td>
+              <td>{{ event.date }}</td>
               <td>
                 <span v-if="event.read">Yes</span>
                 <span v-else>No</span>
@@ -32,7 +34,7 @@
                           type="button"
                           class="btn btn-warning btn-sm"
                           v-b-modal.event-update-modal
-                          @click="editevent(event)">
+                          @click="editEvent(event)">
                       Update
                   </button>
                   <button
@@ -78,6 +80,17 @@
             </b-form-input>
           </b-form-group>
 
+          <b-form-group id="form-date-group"
+                      label="Date:"
+                      label-for="form-date-input">
+          <b-form-input id="form-date-input"
+                          type="date"
+                          v-model="addEventForm.date"
+                          required
+                          placeholder="Enter date">
+            </b-form-input>
+          </b-form-group>
+
         <b-form-group id="form-read-group">
           <b-form-checkbox-group v-model="addEventForm.read" id="form-checks">
             <b-form-checkbox value="true">Read?</b-form-checkbox>
@@ -92,7 +105,7 @@
       </b-form>
 
     </b-modal>
-    <b-modal ref="editeventModal"
+    <b-modal ref="editEventModal"
             id="event-update-modal"
             title="Update"
             hide-footer>
@@ -142,6 +155,7 @@ export default {
       addEventForm: {
         title: '',
         author: '',
+        date: '',
         read: [],
       },
       message: '',
@@ -150,6 +164,7 @@ export default {
         id: '',
         title: '',
         author: '',
+        date: '',
         read: [],
       },
     };
@@ -186,10 +201,12 @@ export default {
     initForm() {
       this.addEventForm.title = '';
       this.addEventForm.author = '';
+      this.addEventForm.date = '';
       this.addEventForm.read = [];
       this.editForm.id = '';
       this.editForm.title = '';
       this.editForm.author = '';
+      this.editForm.date = '';
       this.editForm.read = [];
     },
     onSubmit(evt) {
@@ -200,6 +217,7 @@ export default {
       const payload = {
         title: this.addEventForm.title,
         author: this.addEventForm.author,
+        date: this.addEventForm.date,
         read, // property shorthand
       };
       this.addEvent(payload);
@@ -210,7 +228,7 @@ export default {
       this.$refs.addEventModal.hide();
       this.initForm();
     },
-    editevent(event) {
+    editEvent(event) {
       this.editForm = event;
     },
     onSubmitUpdate(evt) {
@@ -221,6 +239,7 @@ export default {
       const payload = {
         title: this.editForm.title,
         author: this.editForm.author,
+        date: this.editForm.date,
         read,
       };
       this.updateEvent(payload, this.editForm.id);
@@ -241,7 +260,7 @@ export default {
     },
     onResetUpdate(evt) {
       evt.preventDefault();
-      this.$refs.editeventModal.hide();
+      this.$refs.editEventModal.hide();
       this.initForm();
       this.getEvents(); // why?
     },
