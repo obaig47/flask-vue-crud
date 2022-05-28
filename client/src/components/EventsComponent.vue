@@ -2,9 +2,6 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-10">
-        <h1>Events Loader</h1>
-        <hr>
-        <br><br>
         <alert
           v-if="showMessage"
           :message="message"
@@ -259,7 +256,7 @@ export default {
       fields: [
         {
           key: 'title',
-          sortable: true,
+          sortable: false,
         },
         {
           key: 'author',
@@ -267,19 +264,15 @@ export default {
         },
         {
           key: 'date',
-          label: 'Person age',
           sortable: true,
           // Variant applies to the whole column, including the header
           // and footer
-          variant: 'danger',
         },
         {
           key: 'read',
-          label: 'Person age',
           sortable: false,
           // Variant applies to the whole column, including the header
           // and footer
-          variant: 'danger',
         },
       ],
       events: [],
