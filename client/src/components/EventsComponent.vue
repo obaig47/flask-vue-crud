@@ -14,7 +14,7 @@
           Add Event
         </button>
         <br><br>
-        <b-table
+        <b-table-simple
           striped
           hover
           :items="events"
@@ -36,7 +36,7 @@
                 </b-btn>
               </div></span>
           </template>
-        </b-table>
+        </b-table-simple>
         <table class="table table-hover">
           <thead>
             <tr>
@@ -44,7 +44,7 @@
                 Title
               </th>
               <th scope="col">
-                Author
+                Image
               </th>
               <th scope="col">
                 Date
@@ -61,7 +61,7 @@
               :key="index"
             >
               <td>{{ event.title }}</td>
-              <td>{{ event.author }}</td>
+              <td>{{ event.image }}</td>
               <td>{{ event.date }}</td>
               <td>
                 <span v-if="event.read">Yes</span>
@@ -122,16 +122,16 @@
         </b-form-group>
 
         <b-form-group
-          id="form-author-group"
-          label="Author:"
-          label-for="form-author-input"
+          id="form-image-group"
+          label="Image:"
+          label-for="form-image-input"
         >
           <b-form-input
-            id="form-author-input"
-            v-model="addEventForm.author"
+            id="form-image-input"
+            v-model="addEventForm.image"
             type="text"
             required
-            placeholder="Enter author"
+            placeholder="Enter image"
           />
         </b-form-group>
 
@@ -201,16 +201,16 @@
           />
         </b-form-group>
         <b-form-group
-          id="form-author-edit-group"
-          label="Author:"
-          label-for="form-author-edit-input"
+          id="form-image-edit-group"
+          label="Image:"
+          label-for="form-image-edit-input"
         >
           <b-form-input
-            id="form-author-edit-input"
-            v-model="editForm.author"
+            id="form-image-edit-input"
+            v-model="editForm.image"
             type="text"
             required
-            placeholder="Enter author"
+            placeholder="Enter image"
           />
         </b-form-group>
         <b-form-group id="form-read-edit-group">
@@ -259,7 +259,7 @@ export default {
           sortable: false,
         },
         {
-          key: 'author',
+          key: 'image',
           sortable: false,
         },
         {
@@ -278,7 +278,7 @@ export default {
       events: [],
       addEventForm: {
         title: '',
-        author: '',
+        image: '',
         date: '',
         read: [],
       },
@@ -287,7 +287,7 @@ export default {
       editForm: {
         id: '',
         title: '',
-        author: '',
+        image: '',
         date: '',
         read: [],
       },
@@ -326,12 +326,12 @@ export default {
     },
     initForm() {
       this.addEventForm.title = '';
-      this.addEventForm.author = '';
+      this.addEventForm.image = '';
       this.addEventForm.date = '';
       this.addEventForm.read = [];
       this.editForm.id = '';
       this.editForm.title = '';
-      this.editForm.author = '';
+      this.editForm.image = '';
       this.editForm.date = '';
       this.editForm.read = [];
     },
@@ -342,7 +342,7 @@ export default {
       if (this.addEventForm.read[0]) read = true;
       const payload = {
         title: this.addEventForm.title,
-        author: this.addEventForm.author,
+        image: this.addEventForm.image,
         date: this.addEventForm.date,
         read, // property shorthand
       };
@@ -364,7 +364,7 @@ export default {
       if (this.editForm.read[0]) read = true;
       const payload = {
         title: this.editForm.title,
-        author: this.editForm.author,
+        image: this.editForm.image,
         date: this.editForm.date,
         read,
       };

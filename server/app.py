@@ -7,19 +7,19 @@ EVENTS = [
     {
         'id': uuid.uuid4().hex,
         'title': 'On the Road',
-        'author': 'Jack Kerouac',
+        'image': 'Jack Kerouac',
         'read': True
     },
     {
         'id': uuid.uuid4().hex,
         'title': 'Harry Potter and the Philosopher\'s Stone',
-        'author': 'J. K. Rowling',
+        'image': 'J. K. Rowling',
         'read': False
     },
     {
         'id': uuid.uuid4().hex,
         'title': 'Green Eggs and Ham',
-        'author': 'Dr. Seuss',
+        'image': 'Dr. Seuss',
         'read': True
     }
 ]
@@ -58,7 +58,7 @@ def all_events():
         EVENTS.append({
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
-            'author': post_data.get('author'),
+            'image': post_data.get('image'),
             'date': post_data.get('date'),
             'read': post_data.get('read')
         })
@@ -77,8 +77,8 @@ def single_event(event_id):
         EVENTS.append({
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
-            'author': post_data.get('author'),
-            'date': post_data.get('author'),
+            'image': post_data.get('image'),
+            'date': post_data.get('image'),
             'read': post_data.get('read')
         })
         response_object['message'] = 'Event updated!'
