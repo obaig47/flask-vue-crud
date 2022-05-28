@@ -14,7 +14,7 @@
           Add Event
         </button>
         <br><br>
-        <b-table-simple
+        <b-table
           striped
           hover
           :items="events"
@@ -26,17 +26,25 @@
                 class="btn-group"
                 role="group"
               >
-                <b-btn
+                <button
                   v-b-modal.event-update-modal
                   type="button"
                   class="btn btn-warning btn-sm"
                   @click="editEvent(event)"
                 >
                   Update
-                </b-btn>
-              </div></span>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  @click="onDeleteEvent(event)"
+                >
+                  Delete
+                </button>
+              </div>
+            </span>
           </template>
-        </b-table-simple>
+        </b-table>
         <table class="table table-hover">
           <thead>
             <tr>
@@ -50,6 +58,9 @@
                 Date
               </th>
               <th scope="col">
+                Time
+              </th>
+              <th scope="col">
                 Read?
               </th>
               <th />
@@ -61,8 +72,18 @@
               :key="index"
             >
               <td>{{ event.title }}</td>
-              <td>{{ event.image }}</td>
+              <!-- <td>{{ event.image }}</td> -->
+              <td>
+                <b-img
+                  thumbnail
+                  fluid
+                  width="100px"
+                  :src="event.image"
+                  alt="Uploaded Image"
+                />
+              </td>
               <td>{{ event.date }}</td>
+              <td>{{ event.time }}</td>
               <td>
                 <span v-if="event.read">Yes</span>
                 <span v-else>No</span>
@@ -149,6 +170,21 @@
           />
         </b-form-group>
 
+        <b-form-group
+          id="form-time-group"
+          label="Time:"
+          label-for="form-time-input"
+        >
+          <b-form-input
+            id="form-time-input"
+            v-model="addEventForm.time"
+            type="time"
+            required
+            placeholder="Enter time"
+          />
+        </b-form-group>
+
+
         <b-form-group id="form-read-group">
           <b-form-checkbox-group
             id="form-checks"
@@ -176,6 +212,7 @@
         </b-button-group>
       </b-form>
     </b-modal>
+    <!-- EVENT UPDATE START -->
     <b-modal
       id="event-update-modal"
       ref="editEventModal"
@@ -213,16 +250,33 @@
             placeholder="Enter image"
           />
         </b-form-group>
-        <b-form-group id="form-read-edit-group">
-          <b-form-checkbox-group
-            id="form-checks"
-            v-model="editForm.read"
-          >
-            <b-form-checkbox value="true">
-              Read?
-            </b-form-checkbox>
-          </b-form-checkbox-group>
+        <b-form-group
+          id="form-date-group"
+          label="Date:"
+          label-for="form-date-input"
+        >
+          <b-form-input
+            id="form-date-input"
+            v-model="editForm.date"
+            type="date"
+            required
+            placeholder="Enter date"
+          />
         </b-form-group>
+        <b-form-group
+          id="form-time-group"
+          label="Time:"
+          label-for="form-time-input"
+        >
+          <b-form-input
+            id="form-time-input"
+            v-model="editForm.time"
+            type="time"
+            required
+            placeholder="Enter time"
+          />
+        </b-form-group>
+
         <b-button-group>
           <b-button
             type="submit"
@@ -269,6 +323,12 @@ export default {
           // and footer
         },
         {
+          key: 'time',
+          sortable: false,
+          // Variant applies to the whole column, including the header
+          // and footer
+        },
+        {
           key: 'read',
           sortable: false,
           // Variant applies to the whole column, including the header
@@ -280,6 +340,7 @@ export default {
         title: '',
         image: '',
         date: '',
+        time: '',
         read: [],
       },
       message: '',
@@ -289,6 +350,7 @@ export default {
         title: '',
         image: '',
         date: '',
+        time: '',
         read: [],
       },
     };
@@ -328,11 +390,13 @@ export default {
       this.addEventForm.title = '';
       this.addEventForm.image = '';
       this.addEventForm.date = '';
+      this.addEventForm.time = '';
       this.addEventForm.read = [];
       this.editForm.id = '';
       this.editForm.title = '';
       this.editForm.image = '';
       this.editForm.date = '';
+      this.editForm.time = '';
       this.editForm.read = [];
     },
     onSubmit(evt) {
@@ -344,6 +408,7 @@ export default {
         title: this.addEventForm.title,
         image: this.addEventForm.image,
         date: this.addEventForm.date,
+        time: this.addEventForm.time,
         read, // property shorthand
       };
       this.addEvent(payload);
@@ -366,6 +431,7 @@ export default {
         title: this.editForm.title,
         image: this.editForm.image,
         date: this.editForm.date,
+        time: this.editForm.time,
         read,
       };
       this.updateEvent(payload, this.editForm.id);
@@ -376,7 +442,7 @@ export default {
           .put(path, payload)
           .then(() => {
             this.getEvents();
-            this.message = 'event updated!';
+            this.message = 'Event updated!';
             this.showMessage = true;
           })
           .catch((error) => {

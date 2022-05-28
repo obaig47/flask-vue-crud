@@ -7,19 +7,25 @@ EVENTS = [
     {
         'id': uuid.uuid4().hex,
         'title': 'On the Road',
-        'image': 'Jack Kerouac',
+        'image': 'https://static.wikia.nocookie.net/pikmin/images/3/32/P3_Yellow_Pikmin.png',
+        'date': '2022-05-11',
+        'time': '17:00',
         'read': True
     },
     {
         'id': uuid.uuid4().hex,
         'title': 'Harry Potter and the Philosopher\'s Stone',
-        'image': 'J. K. Rowling',
+        'image': 'https://pikmin.wiki.gallery/images/e/ee/Purple_Pikmin_HD.png',
+        'date': '2022-05-13',
+        'time': '15:30',
         'read': False
     },
     {
         'id': uuid.uuid4().hex,
         'title': 'Green Eggs and Ham',
-        'image': 'Dr. Seuss',
+        'image': 'https://pikmin.wiki.gallery/images/5/55/Blue_Pikmin.png',
+        'date': '2022-05-12',
+        'time': '17:00',
         'read': True
     }
 ]
@@ -60,6 +66,7 @@ def all_events():
             'title': post_data.get('title'),
             'image': post_data.get('image'),
             'date': post_data.get('date'),
+            'time': post_data.get('time'),
             'read': post_data.get('read')
         })
         response_object['message'] = 'Event added!'
@@ -78,7 +85,8 @@ def single_event(event_id):
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
             'image': post_data.get('image'),
-            'date': post_data.get('image'),
+            'date': post_data.get('date'),
+            'time': post_data.get('time'),
             'read': post_data.get('read')
         })
         response_object['message'] = 'Event updated!'
