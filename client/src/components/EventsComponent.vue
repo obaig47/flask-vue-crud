@@ -22,7 +22,24 @@
           hover
           :items="events"
           :fields="fields"
-        />
+        >
+          <template #cell(read)="{ event }">
+            <span>
+              <div
+                class="btn-group"
+                role="group"
+              >
+                <b-btn
+                  v-b-modal.event-update-modal
+                  type="button"
+                  class="btn btn-warning btn-sm"
+                  @click="editEvent(event)"
+                >
+                  Update
+                </b-btn>
+              </div></span>
+          </template>
+        </b-table>
         <table class="table table-hover">
           <thead>
             <tr>
