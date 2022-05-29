@@ -299,11 +299,18 @@
 <script>
 import axios from 'axios';
 import Alert from './Alert.vue';
+// import {useFormatter} from '../composables/useFormatter';
 
 export default {
   components: {
     alert: Alert,
   },
+  // setup() {
+  //   const {formatDate} = useFormatter();
+  //   return {
+  //     formatDate,
+  //   };
+  // },
   data() {
     return {
       // Note 'isActive' is left out and will not appear in the rendered table
