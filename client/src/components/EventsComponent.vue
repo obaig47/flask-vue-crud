@@ -84,9 +84,9 @@
               </td>
               <!-- <td>{{ event.image }}</td> -->
               <td />
-              <!-- <td>{{ formatDate(event.date) }}</td> -->
-              <td>{{ event.date }}</td>
-              <td>{{ event.time }}</td>
+              <td>{{ formatDate(event.date) }}</td>
+              <!-- <td>{{ event.date }}</td> -->
+              <td>{{ formatTime(event.time) }}</td>
               <td>
                 <span v-if="event.attending">Yes</span>
                 <span v-else>No</span>
@@ -495,6 +495,33 @@ export default {
     },
     onDeleteEvent(event) {
       this.removeEvent(event.id);
+    },
+    formatDate(date) {
+      return new Date(date).toLocaleDateString('en-us', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      });
+    },
+    formatTime(time) {
+      time = time.split(':');
+
+      const hours = Number(time[0]);
+      const minutes = Number(time[1]);
+      let timeValue = '';
+
+      if (hours > 0 && hours <= 12) {
+        timeValue= '' + hours;
+      } else if (hours > 12) {
+        timeValue= '' + (hours - 12);
+      } else if (hours == 0) {
+        timeValue= '12';
+      }
+
+      timeValue += (minutes < 10) ? ':0' + minutes : ':' + minutes;
+      timeValue += (hours >= 12) ? ' PM' : ' AM';
+      return timeValue;
     },
   },
 };
