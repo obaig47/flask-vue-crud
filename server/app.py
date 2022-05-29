@@ -6,27 +6,27 @@ from flask_cors import CORS
 EVENTS = [
     {
         'id': uuid.uuid4().hex,
-        'title': 'On the Road',
+        'title': 'Picnic at the Park',
         'image': 'https://static.wikia.nocookie.net/pikmin/images/3/32/P3_Yellow_Pikmin.png',
         'date': '2022-05-11',
         'time': '17:00',
-        'read': True
+        'attending': True
     },
     {
         'id': uuid.uuid4().hex,
-        'title': 'Harry Potter and the Philosopher\'s Stone',
+        'title': 'Book Club Meeting',
         'image': 'https://pikmin.wiki.gallery/images/e/ee/Purple_Pikmin_HD.png',
         'date': '2022-05-13',
         'time': '15:30',
-        'read': False
+        'attending': False
     },
     {
         'id': uuid.uuid4().hex,
-        'title': 'Green Eggs and Ham',
+        'title': 'Company Retreat',
         'image': 'https://pikmin.wiki.gallery/images/5/55/Blue_Pikmin.png',
         'date': '2022-05-12',
         'time': '17:00',
-        'read': True
+        'attending': True
     }
 ]
 
@@ -67,7 +67,7 @@ def all_events():
             'image': post_data.get('image'),
             'date': post_data.get('date'),
             'time': post_data.get('time'),
-            'read': post_data.get('read')
+            'attending': post_data.get('attending')
         })
         response_object['message'] = 'Event added!'
     else:
@@ -87,7 +87,7 @@ def single_event(event_id):
             'image': post_data.get('image'),
             'date': post_data.get('date'),
             'time': post_data.get('time'),
-            'read': post_data.get('read')
+            'attending': post_data.get('attending')
         })
         response_object['message'] = 'Event updated!'
     if request.method == 'DELETE':
