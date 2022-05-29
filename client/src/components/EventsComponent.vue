@@ -14,13 +14,13 @@
           Add Event
         </button>
         <br><br>
-        <b-table
+        <!-- <b-table
           striped
           hover
           :items="events"
           :fields="fields"
         >
-          <template #cell(read)="{ event }">
+          <template #cell(attending)="{ event }">
             <span>
               <div
                 class="btn-group"
@@ -44,15 +44,15 @@
               </div>
             </span>
           </template>
-        </b-table>
+        </b-table> -->
         <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col">
-                Title
+                Event Title
               </th>
               <th scope="col">
-                Image
+                <!-- Image -->
               </th>
               <th scope="col">
                 Date
@@ -61,7 +61,7 @@
                 Time
               </th>
               <th scope="col">
-                Read?
+                Attending
               </th>
               <th />
             </tr>
@@ -71,21 +71,24 @@
               v-for="(event, index) in events"
               :key="index"
             >
-              <td>{{ event.title }}</td>
-              <!-- <td>{{ event.image }}</td> -->
               <td>
+                {{ event.title }}
+                <br>
                 <b-img
                   thumbnail
                   fluid
-                  width="100px"
+                  width="200px"
                   :src="event.image"
                   alt="Uploaded Image"
                 />
               </td>
+              <!-- <td>{{ event.image }}</td> -->
+              <td />
+              <!-- <td>{{ formatDate(event.date) }}</td> -->
               <td>{{ event.date }}</td>
               <td>{{ event.time }}</td>
               <td>
-                <span v-if="event.read">Yes</span>
+                <span v-if="event.attending">Yes</span>
                 <span v-else>No</span>
               </td>
               <td>
@@ -130,7 +133,7 @@
       >
         <b-form-group
           id="form-title-group"
-          label="Title:"
+          label="Event Title:"
           label-for="form-title-input"
         >
           <b-form-input
@@ -185,13 +188,13 @@
         </b-form-group>
 
 
-        <b-form-group id="form-read-group">
+        <b-form-group id="form-attending-group">
           <b-form-checkbox-group
             id="form-checks"
-            v-model="addEventForm.read"
+            v-model="addEventForm.attending"
           >
             <b-form-checkbox value="true">
-              Read?
+              Attending?
             </b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
@@ -226,7 +229,7 @@
       >
         <b-form-group
           id="form-title-edit-group"
-          label="Title:"
+          label="Event Title:"
           label-for="form-title-edit-input"
         >
           <b-form-input
@@ -275,6 +278,17 @@
             required
             placeholder="Enter time"
           />
+        </b-form-group>
+
+        <b-form-group id="form-attending-group">
+          <b-form-checkbox-group
+            id="form-checks"
+            v-model="editForm.attending"
+          >
+            <b-form-checkbox value="true">
+              Attending?
+            </b-form-checkbox>
+          </b-form-checkbox-group>
         </b-form-group>
 
         <b-button-group>
@@ -336,7 +350,7 @@ export default {
           // and footer
         },
         {
-          key: 'read',
+          key: 'attending',
           sortable: false,
           // Variant applies to the whole column, including the header
           // and footer
