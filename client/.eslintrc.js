@@ -20,5 +20,6 @@ module.exports = {
     'vue',
   ],
   'rules': {
+    "require-jsdoc" : 0
   },
 };
