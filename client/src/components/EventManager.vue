@@ -60,9 +60,6 @@
               <th scope="col">
                 Time
               </th>
-              <th scope="col">
-                Attending
-              </th>
               <th />
             </tr>
           </thead>
@@ -87,10 +84,6 @@
               <td>{{ formatDate(event.date) }}</td>
               <!-- <td>{{ event.date }}</td> -->
               <td>{{ formatTime(event.time) }}</td>
-              <td>
-                <span v-if="event.attending">Yes</span>
-                <span v-else>No</span>
-              </td>
               <td>
                 <div
                   class="btn-group"
@@ -187,18 +180,6 @@
           />
         </b-form-group>
 
-
-        <b-form-group id="form-attending-group">
-          <b-form-checkbox-group
-            id="form-checks"
-            v-model="addEventForm.attending"
-          >
-            <b-form-checkbox value="true">
-              Attending?
-            </b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
-
         <b-button-group>
           <b-button
             type="submit"
@@ -280,17 +261,6 @@
           />
         </b-form-group>
 
-        <b-form-group id="form-attending-group">
-          <b-form-checkbox-group
-            id="form-checks"
-            v-model="editForm.attending"
-          >
-            <b-form-checkbox value="true">
-              Attending?
-            </b-form-checkbox>
-          </b-form-checkbox-group>
-        </b-form-group>
-
         <b-button-group>
           <b-button
             type="submit"
@@ -313,18 +283,11 @@
 <script>
 import axios from 'axios';
 import AlertNotification from './AlertNotification.vue';
-// import {useFormatter} from '../composables/useFormatter';
 
 export default {
   components: {
     alert: AlertNotification,
   },
-  // setup() {
-  //   const {formatDate} = useFormatter();
-  //   return {
-  //     formatDate,
-  //   };
-  // },
   data() {
     return {
       // Note 'isActive' is left out and will not appear in the rendered table
@@ -349,12 +312,6 @@ export default {
           // Variant applies to the whole column, including the header
           // and footer
         },
-        {
-          key: 'attending',
-          sortable: false,
-          // Variant applies to the whole column, including the header
-          // and footer
-        },
       ],
       events: [],
       addEventForm: {
@@ -362,7 +319,6 @@ export default {
         image: '',
         date: '',
         time: '',
-        attending: [],
       },
       message: '',
       showMessage: false,
@@ -372,7 +328,6 @@ export default {
         image: '',
         date: '',
         time: '',
-        attending: [],
       },
     };
   },
@@ -412,25 +367,20 @@ export default {
       this.addEventForm.image = '';
       this.addEventForm.date = '';
       this.addEventForm.time = '';
-      this.addEventForm.attending = [];
       this.editForm.id = '';
       this.editForm.title = '';
       this.editForm.image = '';
       this.editForm.date = '';
       this.editForm.time = '';
-      this.editForm.attending = [];
     },
     onSubmit(evt) {
       evt.preventDefault();
       this.$refs.addEventModal.hide();
-      let attending = false;
-      if (this.addEventForm.attending[0]) attending = true;
       const payload = {
         title: this.addEventForm.title,
         image: this.addEventForm.image,
         date: this.addEventForm.date,
         time: this.addEventForm.time,
-        attending, // property shorthand
       };
       this.addEvent(payload);
       this.initForm();
@@ -446,14 +396,11 @@ export default {
     onSubmitUpdate(evt) {
       evt.preventDefault();
       this.$refs.editEventModal.hide();
-      let attending = false;
-      if (this.editForm.attending[0]) attending = true;
       const payload = {
         title: this.editForm.title,
         image: this.editForm.image,
         date: this.editForm.date,
         time: this.editForm.time,
-        attending,
       };
       this.updateEvent(payload, this.editForm.id);
     },
