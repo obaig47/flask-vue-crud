@@ -1,6 +1,6 @@
 # event-management-app
 
-This application was made with a clone of the application outlined in this tutorial: Check out the [post](https://testdriven.io/developing-a-single-page-app-with-flask-and-vuejs).
+This application was adapted from a fork of the application outlined in this tutorial written by [Michael Herman](https://github.com/mjhea0): Check out the [post](https://testdriven.io/developing-a-single-page-app-with-flask-and-vuejs).
 
 ## How to run
 
@@ -26,22 +26,17 @@ This application was made with a clone of the application outlined in this tutor
 
    Navigate to [http://localhost:8080](http://localhost:8080)
 
-- Readme that addresses:
+## Measuring and Driving Adoption
 
-  - [ ] Any relevant instructions on how to run the app
-  - [ ] Improvements you’d make if you had additional time
-  - [ ] Brief description (no more than a paragraph) on how you’d measure and drive adoption of your app
+- To measure adoption of the application, `vue-gtag` can be leveraged by sending event data to Google Analytics using a tracking ID. The North Star metric for this simple application could be number of events created. This would be measured via an event handler on the "Add Event" Button. Other useful metrisc relating to click-through rate and site usage can be gained from `vue-gtag` if this application were integrated into a larger set of applications. To drive adoption of this application, I would work closely with the product team to understand the personas/use cases, and then iteratively integrate those needs into the application. A/B testing could be used to determine layout decisions. Based on the analytics data and results of testing, improvements can be made to drive adoption and improve utility.
 
-- To measure and measure adoption of the application, I would attach the Vue app to Google Analytics using `vue-gtag` by the tracking ID. The North Star metric for this simple application, if deployed and containing an Identity and Access management layer, would be number of attendees as well as number of events created. This would be measured via an event handler on the Create Event Button as well as an event handler on the Attended checknox. To drive adoption of this application, I would work closely with product managers to understand the personas and use cases, and then integrate those needs into the application so that the application is clear and easily accessible to the user. A/B testing could be relevant to determine best layout for driving users towards this application.
-
-### Future Features
-
-- Fix dependency issues to remove security issues
-- Account login
-- Database for persisting data and storing images
-- Drill through into an event to more detailed description
-- Abbreviated description in table view
-- Tagging system
-- Naughty strings from mockaroo to test validation
-- Move image field to being stored under the title
-- Enable recurrance of events for future scheduling
+### Future Improvements
+- Update dependencies to resolve security vulnerabilities
+- Add sort using b-table
+- Add identity and access layer for supporting multiple users
+- Add homepage which serves as Map of Concepts (relating to Events) for drill through
+- Add Attending/RSVP, event description, event tags, truncated description
+- Add Database layer
+- Add file browse for images
+- Add recurring of events for future scheduling
+- Test "Naughty strings" to improve validation
