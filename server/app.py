@@ -2,31 +2,8 @@ import uuid
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
-
-EVENTS = [
-    {
-        'id': uuid.uuid4().hex,
-        'title': 'Picnic at the Park',
-        'image': 'https://static.wikia.nocookie.net/pikmin/images/3/32/P3_Yellow_Pikmin.png',
-        'date': '2022-05-11',
-        'time': '17:00',
-    },
-    {
-        'id': uuid.uuid4().hex,
-        'title': 'Book Club Meeting',
-        'image': 'https://pikmin.wiki.gallery/images/e/ee/Purple_Pikmin_HD.png',
-        'date': '2022-05-13',
-        'time': '15:30',
-    },
-    {
-        'id': uuid.uuid4().hex,
-        'title': 'Company Retreat',
-        'image': 'https://pikmin.wiki.gallery/images/5/55/Blue_Pikmin.png',
-        'date': '2022-05-12',
-        'time': '17:00',
-    }
-]
-
+import data
+EVENTS = sorted(data.EVENTS, key=lambda k: k['date'], reverse=False)
 
 # configuration
 DEBUG = True
@@ -37,13 +14,6 @@ app.config.from_object(__name__)
 
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
-
-
-# sanity check route
-@app.route('/ping', methods=['GET'])
-def ping_pong():
-    return jsonify('pong!')
-
 
 def remove_event(event_id):
     for event in EVENTS:
