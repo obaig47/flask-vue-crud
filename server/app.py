@@ -1,3 +1,9 @@
+"""
+app.py
+
+Flask application server
+"""
+
 import uuid
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -16,6 +22,15 @@ app.config.from_object(__name__)
 CORS(app, resources={r'/*': {'origins': '*'}})
 
 def remove_event(event_id):
+    """
+    UUID level function called by single_event for removing an event
+
+    Parameters:
+        event_id (str): A uuid string
+
+    Returns:
+        Boolean
+    """
     for event in EVENTS:
         if event['id'] == event_id:
             EVENTS.remove(event)
@@ -25,6 +40,12 @@ def remove_event(event_id):
 
 @app.route('/events', methods=['GET', 'POST'])
 def all_events():
+    """
+    Base function after fetching and adding events
+
+    Returns:
+        JSON response object
+    """
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
@@ -43,6 +64,16 @@ def all_events():
 
 @app.route('/events/<event_id>', methods=['PUT', 'DELETE'])
 def single_event(event_id):
+    """
+    UUID level function called after update and delete requests
+    which removes original record
+
+    Parameters:
+        event_id (str): A uuid string
+
+    Returns:
+        JSON response object
+    """
     response_object = {'status': 'success'}
     if request.method == 'PUT':
         post_data = request.get_json()

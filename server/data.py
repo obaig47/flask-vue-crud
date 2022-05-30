@@ -1,3 +1,10 @@
+"""
+data.py
+
+Declares EVENTS constant -> 50 rows of mockaroo data with python uuid generated to
+support dynamic ID assignment and referencing of ID's to update and delete records
+"""
+
 import uuid
 
 EVENTS = [
