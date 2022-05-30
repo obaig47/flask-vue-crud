@@ -312,12 +312,12 @@
 
 <script>
 import axios from 'axios';
-import Alert from './Alert.vue';
+import AlertNotification from './AlertNotification.vue';
 // import {useFormatter} from '../composables/useFormatter';
 
 export default {
   components: {
-    alert: Alert,
+    alert: AlertNotification,
   },
   // setup() {
   //   const {formatDate} = useFormatter();
