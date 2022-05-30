@@ -9,106 +9,83 @@
         <button
           v-b-modal.event-modal
           type="button"
-          class="btn btn-success btn-sm"
+          class="btn btn-success btn-block"
         >
           Add Event
         </button>
+        <br>
+        <b-form-input
+          v-model="filter"
+          type="text"
+          placeholder="Filter by Event Title"
+        />
         <br><br>
-        <!-- <b-table
-          striped
-          hover
-          :items="events"
-          :fields="fields"
-        >
-          <template #cell(attending)="{ event }">
-            <span>
-              <div
-                class="btn-group"
-                role="group"
-              >
-                <button
-                  v-b-modal.event-update-modal
-                  type="button"
-                  class="btn btn-warning btn-sm"
-                  @click="editEvent(event)"
-                >
-                  Update
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-danger btn-sm"
-                  @click="onDeleteEvent(event)"
-                >
-                  Delete
-                </button>
-              </div>
-            </span>
-          </template>
-        </b-table> -->
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">
-                Event Title
-              </th>
-              <th scope="col">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped">
+            <thead>
+              <tr>
+                <th scope="col">
+                  Event Title
+                </th>
+                <th scope="col">
                 <!-- Image -->
-              </th>
-              <th scope="col">
-                Date
-              </th>
-              <th scope="col">
-                Time
-              </th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="(event, index) in events"
-              :key="index"
-            >
-              <td>
-                {{ event.title }}
-                <br>
-                <b-img
-                  thumbnail
-                  fluid
-                  width="200px"
-                  :src="event.image"
-                  alt="Uploaded Image"
-                />
-              </td>
-              <!-- <td>{{ event.image }}</td> -->
-              <td />
-              <td>{{ formatDate(event.date) }}</td>
-              <!-- <td>{{ event.date }}</td> -->
-              <td>{{ formatTime(event.time) }}</td>
-              <td>
-                <div
-                  class="btn-group"
-                  role="group"
-                >
-                  <button
-                    v-b-modal.event-update-modal
-                    type="button"
-                    class="btn btn-warning btn-sm"
-                    @click="editEvent(event)"
+                </th>
+                <th scope="col">
+                  Date
+                </th>
+                <th scope="col">
+                  Time
+                </th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(event, index) in filteredRows"
+                :key="index"
+              >
+                <td>
+                  {{ event.title }}
+                  <br>
+                  <b-img
+                    thumbnail
+                    fluid
+                    width="200px"
+                    :src="event.image"
+                    alt="Uploaded Image"
+                  />
+                </td>
+                <!-- <td>{{ event.image }}</td> -->
+                <td />
+                <td>{{ formatDate(event.date) }}</td>
+                <!-- <td>{{ event.date }}</td> -->
+                <td>{{ formatTime(event.time) }}</td>
+                <td>
+                  <div
+                    class="btn-group"
+                    role="group"
                   >
-                    Update
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-danger btn-sm"
-                    @click="onDeleteEvent(event)"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                    <button
+                      v-b-modal.event-update-modal
+                      type="button"
+                      class="btn btn-warning btn-sm"
+                      @click="editEvent(event)"
+                    >
+                      Update
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-danger btn-sm"
+                      @click="onDeleteEvent(event)"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <!-- EVENT ENTRY MODAL -->
@@ -283,6 +260,7 @@
 <script>
 import axios from 'axios';
 import AlertNotification from './AlertNotification.vue';
+import moment from 'moment';
 
 export default {
   components: {
@@ -290,29 +268,7 @@ export default {
   },
   data() {
     return {
-      // Note 'isActive' is left out and will not appear in the rendered table
-      fields: [
-        {
-          key: 'title',
-          sortable: false,
-        },
-        {
-          key: 'image',
-          sortable: false,
-        },
-        {
-          key: 'date',
-          sortable: true,
-          // Variant applies to the whole column, including the header
-          // and footer
-        },
-        {
-          key: 'time',
-          sortable: false,
-          // Variant applies to the whole column, including the header
-          // and footer
-        },
-      ],
+      filter: '',
       events: [],
       addEventForm: {
         title: '',
@@ -330,6 +286,15 @@ export default {
         time: '',
       },
     };
+  },
+  computed: {
+    filteredRows() {
+      return this.events.filter((row) => {
+        const event = row.title.toString().toLowerCase();
+        const searchTerm = this.filter.toLowerCase();
+        return event.includes(searchTerm);
+      });
+    },
   },
   created() {
     this.getEvents();
@@ -444,31 +409,10 @@ export default {
       this.removeEvent(event.id);
     },
     formatDate(date) {
-      return new Date(date).toLocaleDateString('en-us', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-      });
+      return moment(date, 'YYYY-MM-DD').format('dddd, MMMM Do, YYYY');
     },
     formatTime(time) {
-      time = time.split(':');
-
-      const hours = Number(time[0]);
-      const minutes = Number(time[1]);
-      let timeValue = '';
-
-      if (hours > 0 && hours <= 12) {
-        timeValue= '' + hours;
-      } else if (hours > 12) {
-        timeValue= '' + (hours - 12);
-      } else if (hours == 0) {
-        timeValue= '12';
-      }
-
-      timeValue += (minutes < 10) ? ':0' + minutes : ':' + minutes;
-      timeValue += (hours >= 12) ? ' PM' : ' AM';
-      return timeValue;
+      return moment(time, 'HH:mm').format('h:mm A');
     },
   },
 };
